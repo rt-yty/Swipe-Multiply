@@ -1,0 +1,264 @@
+/* Сброс стилей */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Подключаем шрифт Marck Script */
+body {
+  font-family: "Marck Script", cursive;
+  background: url("images/background.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+/* Заголовок страницы */
+.page-title {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 60px;
+  color: #000;
+  text-shadow: 1px 1px 2px #fff;
+}
+
+/* Контейнер для блоков */
+.forms-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  margin-top: 80px;
+}
+
+/* Общий стиль для блоков-сердец */
+.heart-block {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Стили для блоков на главной странице, чтобы они были меньше и вместительнее */
+.index-heart {
+  width: 350px;      /* Уменьшено с 400px */
+  height: 350px;     /* Уменьшено с 400px */
+  padding: 30px;     /* Уменьшены внутренние отступы */
+}
+
+/* Фон для регистрации и входа (на index.html) */
+.index-heart:nth-child(1) {
+  background-image: url("images/heart-register.png");
+}
+.index-heart:nth-child(2) {
+  background-image: url("images/heart-login.png");
+}
+
+/* Фон для блока Профиль на profile_create.html */
+.profile-block {
+  width: 400px;      /* Оставляем больший размер для более подробной формы */
+  height: 400px;
+  padding: 50px;
+  background-image: url("images/heart-profile.png") !important;
+}
+
+/* Фон для блока Описание на profile_create.html */
+.description-block {
+  width: 400px;
+  height: 400px;
+  padding: 50px;
+  background-image: url("images/heart-description.png") !important;
+}
+
+/* Заголовки внутри сердечек */
+.heart-block h2 {
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  margin-bottom: 20px;
+  font-size: 32px;
+}
+
+/* Стили для форм внутри сердечек */
+.heart-block form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Метки */
+.heart-block form label {
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+/* Поля ввода, текстовая область и загрузка файла */
+.heart-block form input,
+.heart-block form textarea,
+.heart-block form input[type="file"] {
+  width: 90%;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Текстовая область для описания */
+.heart-block form textarea {
+  resize: none;
+}
+
+/* Радио-кнопки */
+.radio-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+/* Кнопка отправки */
+.heart-block form button {
+  margin-top: 15px;
+  background-color: #fff;
+  color: #e60000;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: 26px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  font-family: "Marck Script", cursive;
+}
+
+.heart-block form button:hover {
+  background-color: #ffd6d6;
+}
+
+/* Скрытие метки для textarea */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ---------- Новые стили для общего макета ---------- */
+
+/* Обёртка для всей страницы */
+.page-container {
+  display: flex;
+  flex-direction: row; /* Чтобы сайт был разбит на левую колонку (sidebar) и остальную часть */
+  min-height: 100vh;   /* Растягиваем на всю высоту экрана */
+}
+
+/* Левая панель (sidebar) */
+.sidebar {
+  width: 250px;
+  background-color: rgba(255, 192, 203, 0.8); /* Полупрозрачный розовый */
+  backdrop-filter: blur(2px); /* Для лёгкого размытия (необязательно) */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+/* Элемент внутри sidebar (например, заголовок и пункты меню) */
+.sidebar-item {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #000; /* Можно затемнить текст */
+}
+
+/* Можно отдельно оформить заголовок в sidebar */
+.sidebar-title {
+  font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 40px;
+}
+
+/* Центральная область, куда помещается контент */
+.main-content {
+  flex: 1; /* Занимает всё оставшееся место */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Блок с двумя колонками (желтая слева, белая справа) */
+.info-block {
+  display: flex;
+  flex-direction: row;
+  width: 800px;        /* При необходимости подберите размер */
+  height: 500px;       /* или сделайте auto по высоте, если контента много */
+  border-radius: 10px; /* Слегка скруглим углы */
+  overflow: hidden;    /* Чтобы границы были чёткими */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Левая (жёлтая) часть */
+.info-left {
+  background-color: #fff8be; /* Мягкий жёлтый */
+  width: 50%;
+  padding: 20px;
+  position: relative; /* Чтобы удобно позиционировать кнопки, если нужно */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Чтобы основной контент был сверху, а кнопки внизу */
+}
+
+/* Правая (белая) часть */
+.info-right {
+  background-color: #fff;
+  width: 50%;
+  padding: 20px;
+}
+
+/* Кнопки внизу левой части */
+.info-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+/* Общий стиль для всех кнопок */
+.info-buttons button {
+  background-color: #ffc0cb; /* Розовый */
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* При наведении меняем цвет */
+.info-buttons button:hover {
+  background-color: #ff9eb0;
+}
+
+/* Можно для наглядности отдельные кнопки стилизовать чуть иначе */
+.btn-close {
+  background-color: #f66; /* Кнопка «Закрыть» - красноватая */
+}
+.btn-close:hover {
+  background-color: #ff9999;
+}
+.btn-heart {
+  background-color: #ff69b4; /* Ярко-розовый */
+}
+.btn-heart:hover {
+  background-color: #ffa4d3;
+}
