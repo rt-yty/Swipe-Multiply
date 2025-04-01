@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Дополнительная регистрация</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[type="text"], input[type="date"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 10px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+<h1>Дополнительная регистрация</h1>
+<form id="additionalRegistrationForm">
+  <label for="firstName">Имя:</label>
+  <input type="text" id="firstName" name="firstName" required>
+
+  <label for="lastName">Фамилия:</label>
+  <input type="text" id="lastName" name="lastName" required>
+
+  <label for="city">Город:</label>
+  <input type="text" id="city" name="city" required>
+
+  <label for="birthDate">Дата рождения:</label>
+  <input type="date" id="birthDate" name="birthDate" required>
+
+  <label for="gender">Пол:</label>
+  <select id="gender" name="gender" required>
+    <option value="">Выберите пол</option>
+    <option value="M">М</option>
+    <option value="F">Ж</option>
+  </select>
+
+  <label for="description">Описание:</label>
+  <textarea id="description" name="description" rows="4" required></textarea>
+
+  <input type="submit" value="Продолжить регистрацию">
+</form>
+
+<div id="message"></div>
+
+<script>
+  // Извлекаем логин из URL параметров, например: additional_registration.html?login=user123
+  const urlParams = new URLSearchParams(window.location.search);
+  const login = urlParams.get("login");
+  if (!login) {
+    document.getElementById('message').innerText = "Логин не передан в URL.";
+  }
+
+  document.getElementById('additionalRegistrationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Получаем значения полей
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const city = document.getElementById('city').value;
+    const birthDate = document.getElementById('birthDate').value;
+    const gender = document.getElementById('gender').value;
+    const description = document.getElementById('description').value;
+
+    try {
+      const response = await fetch('/continue_registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login, firstName, lastName, city, birthDate, gender, description })
+      });
+      const result = await response.json();
+      if (response.ok) {
+        // Переход на страницу swipe.html с логином в URL
+        window.location.href = `/swipe.html?login=${encodeURIComponent(login)}`;
+      } else {
+        document.getElementById('message').innerText = result.error || result.message;
+      }
+    } catch (err) {
+      document.getElementById('message').innerText = 'Ошибка при отправке данных';
+    }
+  });
+</script>
+</body>
+</html>

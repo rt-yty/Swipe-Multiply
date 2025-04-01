@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Tinder Clone - Авторизация</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        h2 {
+            color: #333;
+        }
+        #messages {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+<h1>Tinder Clone</h1>
+<div id="messages"></div>
+
+<h2>Регистрация</h2>
+<form id="registerForm">
+    <label for="regUsername">Логин:</label>
+    <input type="text" id="regUsername" name="username" required>
+    <label for="regPassword">Пароль:</label>
+    <!-- Можно оставить тип text для отладки, но в продакшене использовать "password" -->
+    <input type="text" id="regPassword" name="password" required>
+    <input type="submit" value="Зарегистрироваться">
+</form>
+
+<h2>Вход</h2>
+<form id="loginForm">
+    <label for="loginUsername">Логин:</label>
+    <input type="text" id="loginUsername" name="username" required>
+    <label for="loginPassword">Пароль:</label>
+    <input type="text" id="loginPassword" name="password" required>
+    <input type="submit" value="Войти">
+</form>
+
+<script>
+    // Функция для отображения сообщений
+    function showMessage(message) {
+        document.getElementById('messages').innerText = message;
+    }
+
+    // Обработчик для регистрации
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('regUsername').value;
+        const password = document.getElementById('regPassword').value;
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const result = await response.json();
+            // Если требуется дополнительная регистрация, перенаправляем с логином в URL
+            if (result.incomplete_registration) {
+                window.location.href = `/additional_registration.html?login=${encodeURIComponent(username)}`;
+            } else {
+                // Если регистрация завершена, переходим на страницу свайпов с логином в URL
+                window.location.href = `/swipe.html?login=${encodeURIComponent(username)}`;
+            }
+        } catch (err) {
+            showMessage('Ошибка при регистрации');
+        }
+    });
+
+    // Обработчик для входа
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const result = await response.json();
+            if (result.incomplete_registration) {
+                window.location.href = `/additional_registration.html?login=${encodeURIComponent(username)}`;
+            } else {
+                window.location.href = `/swipe.html?login=${encodeURIComponent(username)}`;
+            }
+        } catch (err) {
+            showMessage('Ошибка при входе');
+        }
+    });
+</script>
+</body>
+</html>

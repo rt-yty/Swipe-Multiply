@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Swipe</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .profile-card {
+      background: #fff;
+      width: 700px;
+      height: 500px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      display: flex;
+      overflow: hidden;
+    }
+    .profile-photo {
+      width: 50%;
+      position: relative;
+    }
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-actions {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .photo-actions button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      background: #fff;
+    }
+    .photo-actions button:hover {
+      transform: scale(1.1);
+    }
+    .btn-dislike {
+      border: 2px solid #ff4d4d;
+      color: #ff4d4d;
+    }
+    .btn-like {
+      border: 2px solid #4ddb88;
+      color: #4ddb88;
+    }
+    .profile-info {
+      width: 50%;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .profile-info .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .profile-info h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .profile-info .age {
+      margin-left: 10px;
+      font-size: 20px;
+      color: #888;
+    }
+    .profile-info p {
+      font-size: 16px;
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="profile-card">
+  <!-- Левая часть: фото с кнопками -->
+  <div class="profile-photo">
+    <img id="userPhoto" src="https://via.placeholder.com/350x500" alt="Фото пользователя">
+    <div class="photo-actions">
+      <button class="btn-dislike" title="Отклонить">&#10006;</button>
+      <button class="btn-like" title="Лайк">&#10084;</button>
+    </div>
+  </div>
+  <!-- Правая часть: информация -->
+  <div class="profile-info">
+    <div class="header">
+      <h2 id="userName">Имя Фамилия</h2>
+      <span class="age" id="userAge">25</span>
+    </div>
+    <p id="userDescription">Краткое описание профиля пользователя. Здесь можно написать немного о себе, увлечениях и интересах.</p>
+  </div>
+</div>
+
+<script>
+  // Функция для вычисления возраста по дате рождения в формате YYYY-MM-DD
+  function calculateAge(birthDateStr) {
+    const birthDate = new Date(birthDateStr);
+    const diffMs = Date.now() - birthDate.getTime();
+    const ageDate = new Date(diffMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+
+  // Извлекаем логин из параметров URL, например: swipe.html?login=user123
+  const urlParams = new URLSearchParams(window.location.search);
+  const login = urlParams.get("login");
+  if (!login) {
+    document.body.innerHTML = "<h1>Логин не передан в URL.</h1>";
+  } else {
+    // Запрос случайного профиля, исключая текущего пользователя
+    fetch(`/discover?login=${encodeURIComponent(login)}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Ошибка получения профиля");
+              }
+              return response.json();
+            })
+            .then(profile => {
+              // Обновляем DOM-элементы данными профиля
+              document.getElementById("userName").innerText = profile.firstName + " " + profile.lastName;
+              document.getElementById("userAge").innerText = calculateAge(profile.birthDate);
+              document.getElementById("userDescription").innerText = profile.description;
+              // При наличии ссылки на фото можно обновить src
+              if (profile.photoURL) {
+                document.getElementById("userPhoto").src = profile.photoURL;
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              document.body.innerHTML = "<h1>Ошибка загрузки профиля</h1>";
+            });
+  }
+</script>
+</body>
+</html>
